@@ -27,59 +27,6 @@ class _CollectionPageState extends State<CollectionPageState> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var contentList = <Widget>[];
-    var categoryList = ["一次関数","比の計算","豆知識",];
-    var categoryLen = [2,1,1];
-    var rawcontentNum = 4;
-    for (int i = 0; i < categoryList.length; i++) {
-      contentList.add(
-        Card(
-          child: ListTile(
-            title: Text(
-              categoryList[i],
-              style: TextStyle(
-                fontFamily: 'NotoSansJP',
-              ),
-            ),
-          ),
-        ),
-      );
-      var tmprawContent = <Widget>[];
-      for (int j = 0; j < rawcontentNum; j++) {
-        if(j<categoryLen[i]){
-          tmprawContent.add(
-            Expanded(
-              child:
-                FlatButton(
-                  onPressed: () {
-                    makeColumnPopup(context, "images/"+i.toString()+"_"+j.toString()+".png");
-                  },
-                  child: Image.asset('images/image1.png'),
-                ),
-            ),
-          );
-        } else {
-          tmprawContent.add(
-            Expanded(child:FlatButton(),)
-          );
-        }
-      }
-      contentList.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: tmprawContent));
-      contentList.add(
-        SizedBox(
-          height: 10,
-        ),
-      );
-    }
-    return Container(
-        color: Colors.white,
-        child: SingleChildScrollView(child: Column(children: contentList)));
-  }
-
   void makeColumnPopup(BuildContext context, String filename) {
     showDialog<void>(
       context: context,
@@ -105,5 +52,72 @@ class _CollectionPageState extends State<CollectionPageState> {
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var contentList = <Widget>[];
+    var categoryList = ["一次関数","比の計算","豆知識",];
+    var categoryLen = [2,1,1];
+    var flagReaded = [[1,0],[1],[1]]; //本来はファイルから既読状態を読み取る
+    var rawcontentNum = 4;
+
+    for (int i = 0; i < categoryList.length; i++) {
+      contentList.add(
+        Card(
+          child: ListTile(
+            title: Text(
+              categoryList[i],
+              style: TextStyle(
+                fontFamily: 'NotoSansJP',
+              ),
+            ),
+          ),
+        ),
+      );
+      var tmprawContent = <Widget>[];
+      for (int j = 0; j < rawcontentNum; j++) {
+        if(j<categoryLen[i]){
+          if(flagReaded[i][j]==1) {
+            tmprawContent.add(
+              Expanded(
+                child:
+                FlatButton(
+                  onPressed: () {
+                    makeColumnPopup(context,
+                        "images/" + i.toString() + "_" + j.toString() + ".png");
+                  },
+                  child: Image.asset('images/image2.png'),
+                ),
+              ),
+            );
+          } else {
+            tmprawContent.add(
+              Expanded(
+                child:
+                FlatButton(
+                  child: Image.asset('images/image1.png'),
+                ),
+              ),
+            );
+          }
+        } else {
+          tmprawContent.add(
+            Expanded(child:FlatButton(),)
+          );
+        }
+      }
+      contentList.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: tmprawContent));
+      contentList.add(
+        SizedBox(
+          height: 10,
+        ),
+      );
+    }
+    return Container(
+        color: Colors.white,
+        child: SingleChildScrollView(child: Column(children: contentList)));
   }
 }
