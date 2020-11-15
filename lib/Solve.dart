@@ -1,7 +1,6 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'view.dart';
-String answerFromTextBox = '';
 class solve_question extends StatelessWidget {
   int input = 0;
   List a;
@@ -13,6 +12,7 @@ class solve_question extends StatelessWidget {
     String mame_name = a[0];
     String Question = a[1];
     int Ans = a[2];
+    _answerState(realAnswer: '$Ans');
     return Scaffold(
         appBar: AppBar(
           title: Text('問題'),
@@ -39,7 +39,7 @@ class solve_question extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Image.asset('images/'+mame_name),
+                    Image.asset('images/' + mame_name),
                     Card(
                       margin:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 25),
@@ -69,13 +69,13 @@ class ChangeForm extends StatefulWidget {
   @override
   _ChangeFormState createState() => _ChangeFormState();
 }
+String _text = '';
 class _ChangeFormState extends State<ChangeForm> {
   //受け渡したい変数
-  String _text = '';
   void _handleText(String e) {
     setState(() {
       _text = e;
-      _text = answerFromTextBox;
+      //_text = answerFromTextBox;
     });
   }
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class _ChangeFormState extends State<ChangeForm> {
             style: TextStyle(color: Colors.red),
             obscureText: false,
             maxLines: 1,
-            //パスワード
+            // ユーザの解答
             onChanged: _handleText,
           ),
         ],
@@ -112,19 +112,18 @@ class answer extends StatefulWidget {
   _answerState createState() => _answerState();
 }
 class _answerState extends State<answer> {
-  int _count = 0;
-  void _handlePressed() {
+  String answerFromTextBox; // ユーザの解答
+  String realAnswer = 'error Answer'; // 実際の解答
+  _answerState({this.realAnswer});
+  void _setAns() {
     setState(() {
-      _count++;
+      answerFromTextBox = _text;
     });
   }
   var answerWhich = '';
   var isAnswer = false;
-  //ここに実際の答え
-  var realAnswer = '';
   @override
   Widget build(BuildContext context) {
-    //bool isAnswer = false;
     return Container(
       padding: const EdgeInsets.all(50.0),
       child: Column(
@@ -136,6 +135,7 @@ class _answerState extends State<answer> {
               style: TextStyle(color: Colors.white, fontSize: 20.0),
             ),
             onPressed: () {
+              _setAns();
               setState(() {
                 //ここの''に本当の答えを入れる
                 if (answerFromTextBox == realAnswer) {
@@ -166,7 +166,7 @@ class _answerState extends State<answer> {
               child: ListTile(
                 title: Text(
                   //ここに解答を入れる
-                  '解答',
+                  '$realAnswer',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
