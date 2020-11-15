@@ -12,7 +12,7 @@ class solve_question extends StatelessWidget {
     String mame_name = a[0];
     String Question = a[1];
     int Ans = a[2];
-    _answerState(realAnswer: '$Ans');
+    _answerState(Ans.toString());
     return Scaffold(
         appBar: AppBar(
           title: Text('問題'),
@@ -58,7 +58,7 @@ class solve_question extends StatelessWidget {
                       child: ChangeForm(),
                     ),
                     Center(
-                      child: answer(),
+                      child: answer(Ans.toString()),
                     ),
                   ]);
             }));
@@ -100,6 +100,7 @@ class _ChangeFormState extends State<ChangeForm> {
             maxLines: 1,
             // ユーザの解答
             onChanged: _handleText,
+            keyboardType: TextInputType.number,
           ),
         ],
       ),
@@ -108,13 +109,19 @@ class _ChangeFormState extends State<ChangeForm> {
 }
 //ボタン
 class answer extends StatefulWidget {
+  String realAnswer = 'error Answer'; // 実際の解答
+  answer(String Ans) {
+    this.realAnswer = Ans;
+  }
   @override
-  _answerState createState() => _answerState();
+  _answerState createState() => _answerState('$realAnswer');
 }
 class _answerState extends State<answer> {
   String answerFromTextBox; // ユーザの解答
   String realAnswer = 'error Answer'; // 実際の解答
-  _answerState({this.realAnswer});
+  _answerState(String Ans) {
+    this.realAnswer = Ans;
+  }
   void _setAns() {
     setState(() {
       answerFromTextBox = _text;
